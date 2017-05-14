@@ -19,7 +19,7 @@ gem 'puma', '~> 3.7'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'graphql'
-gem 'github-api'
+gem 'github_api', '~> 0.17.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

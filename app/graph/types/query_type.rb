@@ -7,17 +7,15 @@ QueryType = GraphQL::ObjectType.define do
   connection :repositories do
     type RepositoryType.connection_type
     description "Repositories for User"
+    argument :type, types.String
 
     resolve ->(obj, args, ctx) do
-      [Repository.new(
-        id: '123',
-        name: 'test',
-        description: 'test',
-        forks_count: 1,
-        stargazers_count: 1,
-        private: false,
-        html_url: 'bla'
-      )]
+      # This connection expects an array of Repository objects
+      # [Repository.new(
+      #   id: '123',
+      #   ...
+      # )]
+      Repository.fetch_repositories args[:type]
     end
   end
 end
