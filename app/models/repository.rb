@@ -12,26 +12,43 @@ class Repository
   end
 
   class << self
-    def fetch_repositories(type = '')
+    def github_client
       github = Github.new oauth_token: "#{ENV['GITHUB_TOKEN']}"
+    end
+
+    def fetch_repositories(type = '')
+      github = github_client
 
       # current user repositories
       repositories = github.repos.list type: type
 
       # return an array of Repositories
       repositories.map do |data|
-        hash = data.except!('size')
-
         Repository.new({
-            id: hash['id'],
-            name: hash['full_name'],
-            description: hash['description'],
-            forks_count: hash['forks_count'],
-            stargazers_count: hash['stargazers_count'],
-            private: hash['private'],
-            html_url: hash['html_url']
+            id: data['id'],
+            name: data['full_name'],
+            description: data['description'],
+            forks_count: data['forks_count'],
+            stargazers_count: data['stargazers_count'],
+            private: data['private'],
+            html_url: data['html_url']
         })
       end
+    end
+
+    def create_repository(options)
+      github = github_client
+      repo = github.repos.create(options)
+
+      Repository.new(
+        id: repo['id'],
+        name: repo['full_name'],
+        description: repo['description'],
+        forks_count: repo['forks_count'],
+        stargazers_count: repo['stargazers_count'],
+        private: repo['private'],
+        html_url: repo['html_url']
+      )
     end
   end
 end
