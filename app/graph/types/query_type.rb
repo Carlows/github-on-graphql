@@ -2,10 +2,7 @@ QueryType = GraphQL::ObjectType.define do
   name "Query"
   description "The query root of the main schema"
 
-  field :node, GraphQL::Relay::Node.field
-
-  connection :repositories do
-    type RepositoryType.connection_type
+  field :repositories, types[RepositoryType] do
     description "Repositories for User"
     argument :type, types.String
 
